@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import gql from 'graphql-tag';
 import { useMutation } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
+import { FEED_QUERY } from './LinkList';
 
 const POST_MUTATION = gql`
   mutation PostMutation($description: String!, $url: String!) {
@@ -21,6 +22,14 @@ const CreateLink = props => {
   const [addPost] = useMutation(POST_MUTATION, {
     onCompleted: () => {
       props.history.push('/');
+    },
+    update: (store, { data: { post } }) => {
+      const data = store.readQuery({ query: FEED_QUERY });
+      data.feed.links.unshift(post);
+      store.writeQuery({
+        query: FEED_QUERY,
+        data
+      });
     }
   });
 
