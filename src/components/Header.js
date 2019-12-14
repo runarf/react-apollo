@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { AUTH_TOKEN } from '../constants';
-import { withRouter } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import { AUTH_TOKEN } from "../constants";
+import { withRouter } from "react-router-dom";
 
 const Header = props => {
   const authToken = localStorage.getItem(AUTH_TOKEN);
@@ -12,14 +12,23 @@ const Header = props => {
         <Link to="/" className="ml1 no-underline black">
           new
         </Link>
+        <Link to="/top" className="ml1 no-underline black">
+          top
+        </Link>
         <div className="ml1">|</div>
-        <Link to="/search" className="ml1 no-underline black">
+        <Link
+          to="/search"
+          className="ml1 no-underline black"
+        >
           search
         </Link>
         {authToken && (
           <div className="flex">
             <div className="ml1">|</div>
-            <Link to="/create" className="ml1 no-underline black">
+            <Link
+              to="/create"
+              className="ml1 no-underline black"
+            >
               submit
             </Link>
           </div>
@@ -37,7 +46,10 @@ const Header = props => {
             logout
           </div>
         ) : (
-          <Link to="/login" className="ml1 no-underline black">
+          <Link
+            to="/login"
+            className="ml1 no-underline black"
+          >
             login
           </Link>
         )}

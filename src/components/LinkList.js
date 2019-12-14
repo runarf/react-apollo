@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import Link from './Link';
-import gql from 'graphql-tag';
-import { useQuery } from 'react-apollo';
+import React, { useEffect } from "react";
+import Link from "./Link";
+import gql from "graphql-tag";
+import { useQuery } from "react-apollo";
 
 const NEW_VOTES_SUBSCRIPTION = gql`
   subscription {
@@ -52,8 +52,12 @@ const NEW_LINKS_SUBSCRIPTION = gql`
 `;
 
 export const FEED_QUERY = gql`
-  {
-    feed {
+  query FeedQuery(
+    $first: Int
+    $skip: Int
+    $orderBy: LinkOrderByInput
+  ) {
+    feed(first: $first, skip: $skip, orderBy: $orderBy) {
       links {
         id
         url
@@ -70,12 +74,18 @@ export const FEED_QUERY = gql`
           }
         }
       }
+      count
     }
   }
 `;
 
 const LinkList = () => {
-  const { loading, error, data, subscribeToMore } = useQuery(FEED_QUERY);
+  const {
+    loading,
+    error,
+    data,
+    subscribeToMore
+  } = useQuery(FEED_QUERY);
 
   const subscribeToNewVotes = subscribeToMoreVotes => {
     subscribeToMoreVotes({
@@ -89,7 +99,9 @@ const LinkList = () => {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data.newLink) return prev;
         const newLink = subscriptionData.data.newLink;
-        const exists = prev.feed.links.find(({ id }) => id === newLink.id);
+        const exists = prev.feed.links.find(
+          ({ id }) => id === newLink.id
+        );
         if (exists) return prev;
 
         const newState = {
